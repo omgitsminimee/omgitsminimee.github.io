@@ -112,6 +112,13 @@
         <h1>Somnia Studio</h1>
         <p id="status">Redirecting you to the right place...</p>
         <div class="loading"></div>
+
+        <div class="manual-links">
+            <p>Or choose your platform:</p>
+            <a href="#" id="ios-link" class="button">📱 iOS App Store</a>
+            <a href="#" id="android-link" class="button">🤖 Google Play</a>
+            <a href="/" class="button button-primary">🌐 Web App</a>
+        </div>
     </div>
 
     <script>
@@ -146,8 +153,11 @@
 
         function updateManualLinks() {
             const urls = getStoreUrls();
-            document.getElementById('ios-link').href = urls.ios;
-            document.getElementById('android-link').href = urls.android;
+            const iosLink = document.getElementById('ios-link');
+            const androidLink = document.getElementById('android-link');
+            
+            if (iosLink) iosLink.href = urls.ios;
+            if (androidLink) androidLink.href = urls.android;
         }
 
         function redirectUser() {
@@ -155,33 +165,43 @@
             const urls = getStoreUrls();
             const statusElement = document.getElementById('status');
 
-            // Update manual links
-            updateManualLinks();
+            console.log('Detected platform:', platform);
+            console.log('Redirect URLs:', urls);
 
-            // Show platform-specific message
+            // Update manual links (non-blocking)
+            try {
+                updateManualLinks();
+            } catch (e) {
+                console.error('Error updating manual links:', e);
+            }
+
+            // Show platform-specific message and redirect
+            let redirectUrl = urls.web; // Default fallback
+            
             switch(platform) {
                 case 'ios':
-                    statusElement.textContent = 'Redirecting to App Store...';
-                    setTimeout(() => {
-                        window.location.href = urls.ios;
-                    }, 1500);
+                    if (statusElement) statusElement.textContent = 'Redirecting to App Store...';
+                    redirectUrl = urls.ios;
                     break;
                     
                 case 'android':
-                    statusElement.textContent = 'Redirecting to Google Play...';
-                    setTimeout(() => {
-                        window.location.href = urls.android;
-                    }, 1500);
+                    if (statusElement) statusElement.textContent = 'Redirecting to Google Play...';
+                    redirectUrl = urls.android;
                     break;
                     
                 case 'web':
                 default:
-                    statusElement.textContent = 'Redirecting to web app...';
-                    setTimeout(() => {
-                        window.location.href = urls.web;
-                    }, 1500);
+                    if (statusElement) statusElement.textContent = 'Redirecting to web app...';
+                    redirectUrl = urls.web;
                     break;
             }
+
+            console.log('Redirecting to:', redirectUrl);
+            
+            // Perform redirect
+            setTimeout(() => {
+                window.location.href = redirectUrl;
+            }, 1500);
         }
 
         // Execute on page load
