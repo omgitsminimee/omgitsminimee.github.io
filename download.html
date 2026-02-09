@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Get Somnia Studio</title>
+    <meta name="description" content="Download Somnia Studio for iOS, Android, or use it on the web">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #01203A 0%, #0A4D68 100%);
+            color: white;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .container {
+            text-align: center;
+            max-width: 600px;
+        }
+
+        .logo {
+            width: 120px;
+            height: 120px;
+            margin: 0 auto 30px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 60px;
+        }
+
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+
+        p {
+            font-size: 1.2em;
+            margin-bottom: 30px;
+            opacity: 0.9;
+        }
+
+        .loading {
+            display: inline-block;
+            width: 50px;
+            height: 50px;
+            border: 5px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .manual-links {
+            margin-top: 40px;
+            padding-top: 30px;
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .manual-links p {
+            font-size: 0.9em;
+            margin-bottom: 20px;
+            opacity: 0.7;
+        }
+
+        .button {
+            display: inline-block;
+            margin: 10px;
+            padding: 15px 30px;
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            text-decoration: none;
+            border-radius: 10px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .button:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .button-primary {
+            background: rgba(255, 255, 255, 0.9);
+            color: #01203A;
+        }
+
+        .button-primary:hover {
+            background: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="logo">🌧️</div>
+        <h1>Somnia Studio</h1>
+        <p id="status">Redirecting you to the right place...</p>
+        <div class="loading"></div>
+    </div>
+
+    <script>
+        // Platform detection and auto-redirect
+        function detectPlatform() {
+            const userAgent = navigator.userAgent || navigator.vendor || window.opera;
+            
+            // iOS detection
+            if (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream) {
+                return 'ios';
+            }
+            
+            // Android detection
+            if (/android/i.test(userAgent)) {
+                return 'android';
+            }
+            
+            // Desktop/Web
+            return 'web';
+        }
+
+        function getStoreUrls() {
+            // TODO: Replace these with your actual app store URLs once published
+            const bundleId = 'com.somniastudio.app'; // From app.json
+            
+            return {
+                ios: `https://apps.apple.com/app/somnia-studio/id${bundleId}`, // Replace with actual App Store ID
+                android: `https://play.google.com/store/apps/details?id=${bundleId}`,
+                web: '/' // Redirect to main website
+            };
+        }
+
+        function updateManualLinks() {
+            const urls = getStoreUrls();
+            document.getElementById('ios-link').href = urls.ios;
+            document.getElementById('android-link').href = urls.android;
+        }
+
+        function redirectUser() {
+            const platform = detectPlatform();
+            const urls = getStoreUrls();
+            const statusElement = document.getElementById('status');
+
+            // Update manual links
+            updateManualLinks();
+
+            // Show platform-specific message
+            switch(platform) {
+                case 'ios':
+                    statusElement.textContent = 'Redirecting to App Store...';
+                    setTimeout(() => {
+                        window.location.href = urls.ios;
+                    }, 1500);
+                    break;
+                    
+                case 'android':
+                    statusElement.textContent = 'Redirecting to Google Play...';
+                    setTimeout(() => {
+                        window.location.href = urls.android;
+                    }, 1500);
+                    break;
+                    
+                case 'web':
+                default:
+                    statusElement.textContent = 'Redirecting to web app...';
+                    setTimeout(() => {
+                        window.location.href = urls.web;
+                    }, 1500);
+                    break;
+            }
+        }
+
+        // Execute on page load
+        window.addEventListener('DOMContentLoaded', redirectUser);
+    </script>
+</body>
+</html>
