@@ -195,6 +195,56 @@
             text-decoration: underline;
         }
         
+        .scroll-indicator {
+            position: absolute;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            border: 2px solid rgba(139, 92, 246, 0.6);
+            background: rgba(139, 92, 246, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            animation: bounce 2s infinite;
+            z-index: 10;
+        }
+
+        .scroll-indicator:hover {
+            background: rgba(139, 92, 246, 0.3);
+            border-color: #8b5cf6;
+        }
+
+        .scroll-indicator svg {
+            width: 20px;
+            height: 20px;
+            fill: none;
+            stroke: #8b5cf6;
+            stroke-width: 2.5;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {
+                transform: translateX(-50%) translateY(0);
+            }
+            40% {
+                transform: translateX(-50%) translateY(-8px);
+            }
+            60% {
+                transform: translateX(-50%) translateY(-4px);
+            }
+        }
+
+        .hero {
+            position: relative;
+        }
+
         @media (max-width: 768px) {
             .download-buttons {
                 flex-direction: column;
@@ -241,6 +291,9 @@
                     <img src="./assets/images/GetItOnGooglePlay.png" alt="Get it on Google Play" class="store-badge">
                 </a>
             </div>
+        </div>
+        <div class="scroll-indicator" onclick="document.querySelector('.features').scrollIntoView({behavior: 'smooth'})">
+            <svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"></polyline></svg>
         </div>
     </section>
 
